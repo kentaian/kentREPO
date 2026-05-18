@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neomorphic Cyber-Industrial Design</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&family=Syncopate:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* === VIEWPORT BASE === */
+        :root {
+            --viewport-w: 100vw;
+            --viewport-h: 100dvh;
+            --safe-top: env(safe-area-inset-top, 20px);
+            --safe-bottom: env(safe-area-inset-bottom, 20px);
+            --slide-padding: clamp(1rem, 5vh, 4rem);
+            --font-size-base: clamp(16px, 1.5vh + 0.5vw, 24px);
+        }
+        
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body, html {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #121824;
+            color: #E2E8F0;
+            font-family: 'JetBrains Mono', monospace;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        #presentation {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%;
+            height: 100dvh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: var(--slide-padding);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.6s ease;
+        }
+
+        .slide.active {
+            opacity: 1;
+            pointer-events: auto;
+            z-index: 10;
+        }
+
+        /* === CYBER-INDUSTRIAL THEME === */
+        :root {
+            --bg: #121824;
+            --accent: #00E5FF;
+            --shadow-light: #1a2335;
+            --shadow-dark: #0a0d13;
+            --neu-shadow: -6px -6px 12px var(--shadow-light), 6px 6px 12px var(--shadow-dark);
+            --neu-inset: inset -4px -4px 8px var(--shadow-light), inset 4px 4px 8px var(--shadow-dark);
+        }
+
+        h1, h2, h3 {
+            font-family: 'Syncopate', sans-serif;
+            letter-spacing: -1px;
+            color: var(--accent);
+            text-transform: uppercase;
+        }
+
+        h1 { font-size: clamp(32px, 5vh + 2vw, 80px); margin-bottom: clamp(1rem, 3vh, 2rem); }
+        h2 { font-size: clamp(24px, 3.5vh + 1vw, 50px); margin-bottom: clamp(0.5rem, 2vh, 1.5rem); }
+        p { font-size: var(--font-size-base); line-height: 1.6; max-width: 800px; color: #64748b; }
+
+        .card {
+            background: var(--bg);
+            border-radius: 12px;
+            padding: clamp(1.5rem, 4vh, 3rem);
+            box-shadow: var(--neu-shadow);
+            border: 1px solid rgba(0, 229, 255, 0.05);
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: clamp(1rem, 3vw, 3rem);
+            width: 100%;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        /* Animations */
+        .slide.active .reveal {
+            animation: slideUpFade 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            opacity: 0;
+            transform: translateY(40px);
+        }
+        
+        .slide.active .reveal:nth-child(1) { animation-delay: 0.1s; }
+        .slide.active .reveal:nth-child(2) { animation-delay: 0.3s; }
+        .slide.active .reveal:nth-child(3) { animation-delay: 0.5s; }
+        .slide.active .reveal:nth-child(4) { animation-delay: 0.7s; }
+
+        @keyframes slideUpFade {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Controls */
+        .controls {
+            position: fixed;
+            bottom: var(--safe-bottom);
+            right: var(--slide-padding);
+            z-index: 100;
+            display: flex;
+            gap: 10px;
+        }
+        .controls button {
+            background: var(--bg);
+            border: none;
+            color: var(--accent);
+            width: 44px; height: 44px;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: var(--neu-shadow);
+            display: grid;
+            place-items: center;
+            font-size: 20px;
+        }
+        .controls button:active { box-shadow: var(--neu-inset); }
+
+        .progress {
+            position: fixed;
+            top: 0; left: 0;
+            height: 4px;
+            background: var(--accent);
+            transition: width 0.3s ease;
+            z-index: 100;
+            box-shadow: 0 0 10px var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="progress" id="progress"></div>
+
+    <div id="presentation">
+        <!-- TITLE SLIDE -->
+        <div class="slide active">
+            <div class="card reveal" style="text-align: center;">
+                <h1 class="reveal">Neomorphic Cyber-Industrial</h1>
+                <p class="reveal" style="margin: 0 auto;">A modern, functional interface design utilizing dark neumorphism and cyber accents.</p>
+            </div>
+        </div>
+
+        <!-- CONTENT SLIDE 1 -->
+        <div class="slide">
+            <div class="card reveal">
+                <h2 class="reveal">The Aesthetic</h2>
+                <p class="reveal">We rely on deep space blues (`#121824`) integrated with Cyber Cyan (`#00E5FF`). Neumorphism is achieved via precise inner and outer shadows, removing the need for flat, lifeless backgrounds.</p>
+            </div>
+        </div>
+
+        <!-- FEATURE GRID SLIDE -->
+        <div class="slide">
+            <h2 class="reveal" style="text-align: center; margin-bottom: 2rem;">System Features</h2>
+            <div class="grid-2">
+                <div class="card reveal">
+                    <h3>Dark Neumorphism</h3>
+                    <p>Subtle depth created by calculating shadows from `#121824`.</p>
+                </div>
+                <div class="card reveal">
+                    <h3>Dynamic OTP</h3>
+                    <p>Clean authentication flow mapping directly to Laravel sessions.</p>
+                </div>
+                <div class="card reveal">
+                    <h3>Unified Hub</h3>
+                    <p>Dashboard acting as the singular gateway to the Mailbox and AI Agent.</p>
+                </div>
+                <div class="card reveal">
+                    <h3>Responsive</h3>
+                    <p>Fully functional layouts fitting devices with precise clamp() usage.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- CONCLUSION SLIDE -->
+        <div class="slide">
+            <div class="card reveal" style="text-align: center;">
+                <h2 class="reveal">System Ready</h2>
+                <p class="reveal" style="margin: 0 auto;">Integration complete. The Mailbox and AI Chatbot await your command.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="controls">
+        <button id="prevBtn" onclick="prevSlide()">←</button>
+        <button id="nextBtn" onclick="nextSlide()">→</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const progress = document.getElementById('progress');
+
+        function updateSlides() {
+            slides.forEach((slide, index) => {
+                if(index === currentSlide) {
+                    slide.classList.add('active');
+                } else {
+                    slide.classList.remove('active');
+                }
+            });
+            progress.style.width = ((currentSlide + 1) / slides.length) * 100 + '%';
+        }
+
+        function nextSlide() {
+            if(currentSlide < slides.length - 1) {
+                currentSlide++;
+                updateSlides();
+            }
+        }
+
+        function prevSlide() {
+            if(currentSlide > 0) {
+                currentSlide--;
+                updateSlides();
+            }
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if(e.key === 'ArrowRight' || e.key === 'Space') nextSlide();
+            if(e.key === 'ArrowLeft') prevSlide();
+        });
+
+        updateSlides();
+    </script>
+</body>
+</html>

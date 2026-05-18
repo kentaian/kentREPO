@@ -37,12 +37,55 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const otpInputs = document.querySelectorAll(".otp");
 
+  if (document.querySelector(".error")) {
+    otpInputs.forEach(input => input.value = "");
+    if (otpInputs.length > 0) otpInputs[0].focus();
+  }
+
   otpInputs.forEach((input, index) => {
+    input.addEventListener("paste", (e) => {
+      e.preventDefault();
+      const pastedData = (e.clipboardData || window.clipboardData).getData("text").replace(/[^0-9]/g, "").slice(0, 6);
+      
+      if (!pastedData) return;
+      
+      for (let i = 0; i < pastedData.length; i++) {
+        if (otpInputs[i]) {
+          otpInputs[i].value = pastedData[i];
+        }
+      }
+      
+      const nextFocus = Math.min(pastedData.length, otpInputs.length - 1);
+      otpInputs[nextFocus].focus();
+      
+      const allFilled = Array.from(otpInputs).every(inp => inp.value.length === 1);
+      if (allFilled) {
+        const form = input.closest("form");
+        if (form) {
+          const btn = form.querySelector('button[type="submit"]');
+          if (btn) btn.textContent = "Verifying...";
+          setTimeout(() => form.submit(), 150);
+        }
+      }
+    });
+
     input.addEventListener("input", () => {
       input.value = input.value.replace(/[^0-9]/g, "");
 
-      if (input.value && index < otpInputs.length - 1) {
-        otpInputs[index + 1].focus();
+      if (input.value) {
+        if (index < otpInputs.length - 1) {
+          otpInputs[index + 1].focus();
+        } else {
+          const allFilled = Array.from(otpInputs).every(inp => inp.value.length === 1);
+          if (allFilled) {
+            const form = input.closest("form");
+            if (form) {
+              const btn = form.querySelector('button[type="submit"]');
+              if (btn) btn.textContent = "Verifying...";
+              setTimeout(() => form.submit(), 150);
+            }
+          }
+        }
       }
     });
 

@@ -16,7 +16,7 @@
                 @csrf
 
                 <label for="phone">Phone Number</label>
-                <input id="phone" name="phone" type="tel" placeholder="+63 900 000 0000" autocomplete="tel"
+                <input id="phone" name="phone" type="tel" placeholder="0900 000 0000" autocomplete="tel"
                     value="{{ old('phone') }}" required>
 
                 @error('phone')
