@@ -18,8 +18,8 @@
             <br>
             <hr>
 
-            <a href="{{ route('login.google') }}" class="btn google" style="display: flex; align-items: center; justify-content: center; text-decoration: none;">
-                <img src="./assets/Google_Favicon_2025.svg.webp" alt="" height="32" style="margin-right: 10px;">
+            <a href="{{ route('login.google') }}" class="btn google">
+                <img src="./assets/Google_Favicon_2025.svg.webp" alt="" height="22">
                 Login with Google Account
             </a>
         </div>
