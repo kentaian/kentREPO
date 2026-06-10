@@ -22,3 +22,8 @@
 Homestead.json
 Homestead.yaml
 Thumbs.db
+
+# Local test/debug scratch files
+test_*.php
+test_*.txt
+test2_*.txt

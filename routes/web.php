@@ -15,7 +15,8 @@ Route::post('/otp/email', [EmailController::class, 'sendEmail'])->name('otp.emai
 
 Route::get('/validate-otp', [AuthController::class, 'showValidateOtp'])->name('validate-otp');
 Route::post('/otp/validate', [AuthController::class, 'validateOtp'])->name('otp.validate');
-Route::post('/login/google', [AuthController::class, 'loginWithGoogle'])->name('login.google');
+Route::get('/auth/google/redirect', [AuthController::class, 'redirectToGoogle'])->name('login.google');
+Route::get('/auth/google/callback', [AuthController::class, 'handleGoogleCallback'])->name('login.google.callback');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::middleware([CheckAuthenticated::class])->group(function () {

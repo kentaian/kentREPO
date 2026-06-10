@@ -18,13 +18,10 @@
             <br>
             <hr>
 
-            <form action="{{ route('login.google') }}" method="POST">
-                @csrf
-                <button type="submit" class="btn google">
-                    <img src="./assets/Google_Favicon_2025.svg.webp" alt="" height="32">
-                    Login with Google Account
-                </button>
-            </form>
+            <a href="{{ route('login.google') }}" class="btn google" style="display: flex; align-items: center; justify-content: center; text-decoration: none;">
+                <img src="./assets/Google_Favicon_2025.svg.webp" alt="" height="32" style="margin-right: 10px;">
+                Login with Google Account
+            </a>
         </div>
     </div>
 @endsection

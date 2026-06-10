@@ -12,23 +12,28 @@ class EmailController extends Controller
     {
         $validated = $request->validate([
             'email' => ['required', 'email', 'max:255'],
-        ], [
-            'email.email' => 'INVALID FORMAT: Please enter a valid email address.'
         ]);
 
         $email = $validated['email'];
+        $otp = (string) rand(100000, 999999);
+
+        // Store OTP variables persistently in session
+        session([
+            'otp_code' => $otp,
+            'otp_target' => $email,
+            'otp_type' => 'email',
+            'otp_sent' => true,
+        ]);
 
         try {
-
-
             $response = Http::withToken(config('services.repohive_email.token'))
                 ->acceptJson()
                 ->timeout(10)
                 ->post(rtrim(config('services.repohive_email.base_url'), '/') . '/email/send', [
                     'to' => $email,
-                    'subject' => 'Verify your account',
-                    'html' => '<p>Your code is <strong>123456</strong>.</p>',
-                    'text' => 'Your code is 123456.',
+                    'subject' => 'Kent Aian Tabuelog',
+                    'html' => '<p>Your OTP code is <strong>' . $otp . '</strong></p>',
+                    'text' => 'Your OTP code is ' . $otp,
                 ]);
 
             if ($response->successful()) {
@@ -39,41 +44,33 @@ class EmailController extends Controller
                     ]);
                 }
 
-                return redirect()
-                    ->route('validate-otp')
-                    ->with([
-                        'otp_target' => $email,
-                        'otp_type' => 'email',
-                        'otp_sent' => true,
-                    ]);
+                return redirect()->route('validate-otp');
             }
+
+            // Log failure and return error response
+            Log::error("Email API failed with status {$response->status()}: " . $response->body());
 
             if ($request->expectsJson()) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Failed to send email.',
-                    'error' => $response->json(),
+                    'message' => 'Email sending failed (API error).',
                 ], 500);
             }
 
-            Log::error('Email API Error: ' . $response->body());
+            return back()->withInput()->with('email_error', 'COMMUNICATION FAILURE: Unable to dispatch email OTP at this time.');
 
-            return back()
-                ->withInput()
-                ->with('email_error', 'COMMUNICATION FAILURE: Unable to dispatch OTP to the provided email.');
         } catch (\Exception $e) {
-            Log::error('Email Sending Failed: ' . $e->getMessage());
+            // Log exception and return error response
+            Log::error("Email Sending Failed: " . $e->getMessage());
 
             if ($request->expectsJson()) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'SYSTEM ERROR: Server unreachable.',
-                ], 503);
+                    'message' => 'Email sending failed (Connection error).',
+                ], 500);
             }
 
-            return back()
-                ->withInput()
-                ->with('email_error', 'SYSTEM ERROR: External communication server is currently down or unreachable.');
+            return back()->withInput()->with('email_error', 'CONNECTION ERROR: The email service is currently unreachable.');
         }
     }
 }

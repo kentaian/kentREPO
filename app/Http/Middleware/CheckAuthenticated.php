@@ -15,7 +15,7 @@ class CheckAuthenticated
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (!$request->session()->has('authenticated')) {
+        if (!\Illuminate\Support\Facades\Auth::check()) {
             return redirect()->route('index');
         }
 
